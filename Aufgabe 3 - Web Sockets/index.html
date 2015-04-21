@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="de">
+    <meta charset="UTF-8">
+    <title>ClassTalk</title>
+    <script src="components/bower_components/webcomponentsjs/webcomponents.min.js"></script>
+
+    <link rel="import" href="components/bower_components/polymer/polymer.html">
+    <link href="elements/my-bubble.html" rel="import">
+    <link href="my-chatfield.html" rel="import" />
+
+    <style>
+
+        @font-face{
+            font-family: "cc";
+            src: url("font/cc.ttf");
+        }
+
+        html{
+            background-image: url("img/chalkboard-black.jpg");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            min-height: 100%;
+        }
+
+        body{
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 7.5em 0 3em;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 6em;
+            font-family: cc;
+            color: whitesmoke;
+        }
+
+        footer {
+            position: fixed;
+            padding: 10px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>Classtalk</header>
+
+
+<div id="main">
+</div>
+
+<footer>
+    <chat-field></chat-field>
+</footer>
+
+<script>
+
+    function newBubble(msg){
+        var bubble = document.createElement("my-bubble");
+        bubble.nachricht = msg.what;
+        bubble.absender = msg.who;
+        bubble.zeit = msg.when;
+
+        document.getElementById("main").appendChild(bubble);
+        bubble.scrollIntoView();
+    }
+
+
+    var connection = new WebSocket('ws://nondes.de:8887');
+    // When the connection is open, send some data to the server
+    connection.onopen = function () {
+    };
+
+    // Log errors
+    connection.onerror = function (error) {
+        console.log('WebSocket Error ' + error);
+    };
+
+    // Log messages from the server
+    connection.onmessage = function (e) {
+        console.log('Server: ' + e.data);
+
+        var msg = JSON.parse(e.data);
+
+        newBubble(msg);
+    };
+</script>
+
+
+</body>
+</html>

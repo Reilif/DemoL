@@ -1,0 +1,62 @@
+<template>
+    <style>
+        #tfMessage {
+            width: 90%;
+        }
+
+        #btSend {
+            width: 9%;
+        }
+    </style>
+
+    <input type="text" id="tfMessage"/>
+    <button  id="btSend">Senden</button>
+</template>
+
+<script>
+
+    var thatDoc = document;
+    var thisDoc = (thatDoc._currentScript || thatDoc.currentScript).ownerDocument;
+
+    var ChatFieldProto = Object.create(HTMLElement.prototype);
+
+    ChatFieldProto.createdCallback = function () {
+        // Erzeugt die ShadowRoot
+        var shadowRoot = this.createShadowRoot();
+        // Erzeugt einen Clone vom Template und hängt diesen an die ShadowRoot
+        var template = thisDoc.querySelector('template').content;
+        var clone = thatDoc.importNode(template, true);
+        shadowRoot.appendChild(clone);
+
+        // Holt sich ein Element
+        ChatFieldProto.tfMessage = shadowRoot.getElementById("tfMessage");
+        this.btSend = shadowRoot.getElementById("btSend");
+
+        this.btSend.addEventListener("click",function (e){
+            ChatFieldProto.sendMessage();
+        });
+
+        this.tfMessage.onkeypress = function (e) {
+            if(e.keyCode == 13) {
+                ChatFieldProto.sendMessage();
+            }
+        }
+    };
+
+
+    ChatFieldProto.sendMessage = function(){
+        var message = ChatFieldProto.tfMessage.value;
+        if(message.length > 0){
+
+            var msg = {};
+            msg.what = message;
+            msg.when = new Date();
+            msg.who = who;
+
+            connection.send(JSON.stringify(msg));
+            ChatFieldProto.tfMessage.value = "";
+        }
+    };
+
+    var ChatField = thisDoc.registerElement('chat-field', {prototype: ChatFieldProto});
+</script>

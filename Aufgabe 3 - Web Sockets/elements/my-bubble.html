@@ -1,0 +1,72 @@
+<link rel="import" href="../components/bower_components/polymer/polymer.html">
+<script src="time-element.js"></script>
+
+<polymer-element name="my-bubble" attributes="nachricht zeit absender color">
+    <template>
+
+        <style>
+            #sprachblase {
+                position: relative;
+                max-width: 90%;
+                min-width: 100px;
+                font-size: 1em;
+                font-family: helvetica, tahoma;
+                display: table;
+                border: 4px solid {{color}};
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+                text-align: left;
+                background: #fff;
+                margin-bottom: 25px;
+                padding: 5px;
+            }
+
+            #sprachblase:before {
+                content: ' ';
+                position: absolute;
+                width: 0;
+                height: 0;
+                left: 5px;
+                top: 100%;
+                border: 10px solid;
+                border-color: {{color}} transparent transparent {{color}};
+            }
+
+            #sprachblase:after {
+                content: ' ';
+                position: absolute;
+                width: 0;
+                height: 0;
+                left: 8px;
+                top: 100%;
+                border: 6px solid;
+                border-color: #fff transparent transparent #fff;
+            }
+
+            #divAbsender {
+                font-style: italic;
+                font-size: 10px;
+                float: right;
+            }
+
+            time {
+                font-size: 10px;
+                float: left;
+            }
+        </style>
+        <div id="sprachblase">
+            <div id="divNachricht">{{nachricht}}</div>
+            <time is="relative-time" datetime="{{zeit}}"></time>
+            <div id="divAbsender">{{absender}}</div>
+        </div>
+    </template>
+    <script>
+        Bubble = Polymer({
+            zeit: new Date(),
+            nachricht: "Lorem Ipsum",
+            absender: "Yoda",
+            color: "red"
+        });
+    </script>
+</polymer-element>
